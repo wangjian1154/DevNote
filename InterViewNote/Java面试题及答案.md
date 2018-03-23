@@ -19,3 +19,6 @@
   + 4.Map里可以有任意个Null值，但是只能有一个Null键
   + 4.Map里可以有任意个Null值，但是只能有一个Null键
   + 5.Map最流行的几个实现类是HashMap、LinkedHashMap、HashTable和TreeMap。常用的是HashMap和TreeMap
+
+#### HashSet是如何保证不重复的
++ HashSet是哈希表结构，当一个元素要存入HashSet集合时，首先通过自身的hashCode算出一个值，通过这个值查找元素在集合中的位置，如果没有就存入。如果有，就需要调用equals方法进行比较，如果equals返回为真，证明这两个元素相等，就不存

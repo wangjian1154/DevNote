@@ -1,6 +1,6 @@
-## 热门Java面试题
+# 热门Java面试题
 
-#### List、Set、Map的区别
+### List、Set、Map的区别
 + List、Set都实现了Collection接口。Map不是Collection的子类或接口的实现类，他就是一个接口
 + List:
   + 1.可以有重复的对象
@@ -20,5 +20,35 @@
   + 4.Map里可以有任意个Null值，但是只能有一个Null键
   + 5.Map最流行的几个实现类是HashMap、LinkedHashMap、HashTable和TreeMap。常用的是HashMap和TreeMap
 
-#### HashSet是如何保证不重复的
+### HashSet是如何保证不重复的
 + HashSet是哈希表结构，当一个元素要存入HashSet集合时，首先通过自身的hashCode算出一个值，通过这个值查找元素在集合中的位置，如果没有就存入。如果有，就需要调用equals方法进行比较，如果equals返回为真，证明这两个元素相等，就不存
+
+### 强引用 、软引用、 弱引用、虚引用
++ 强引用:
+  + 只要引用存在，垃圾回收器永不回收
+  ```java
+  String str = "abc";
+  List<String> list = new Arraylist<String>();
+  list.add(str);
+  ```
+  在list集合里的数据不会释放，即使内存不足也不会
++ 软引用:
+  + 非必须引用，内存溢出之前进行回收
+  ```java
+  Object obj = new Object();
+  SoftReference<Object> sf = new SoftReference<Object>(obj);
+  obj = null;
+  sf.get();//有时候会返回null
+  ```
++ 弱引用  
+  + 如果一个对象具有弱引用，在GC线程扫描内存区域的过程中，不管当前内存足够与否，都会回收内存
+  ```java
+  //弱引用  
+  WeakReference<User>weakReference=new WeakReference<User>(new User());  
+  ```
++ 虚引用
+  + 如果一个对象仅持有虚引用，在任何时候都有可能会被回收。虚引用于弱应用、软引用的区别在于:虚引用必须和引用队列联合使用。虚引用主要用来跟踪对象，被垃圾回收的活动。
+  ```java
+  //虚引用  
+  PhantomReference<User> phantomReference=new PhantomReference<User>(new User(),new ReferenceQueue<User>());  
+  ```

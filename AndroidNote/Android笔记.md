@@ -24,3 +24,8 @@
     ```
     adb shell
     ```
+#### 兼容Android8.0版本更新无法弹出安装页面的bug
+  - 因为8.0添加了新的安全措施，不允许应用内安装未经过Google play验证的应用,所以添加下面这个权限即可解决问题
+    ```
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    ```

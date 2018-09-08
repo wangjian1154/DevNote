@@ -52,3 +52,15 @@
   //虚引用  
   PhantomReference<User> phantomReference=new PhantomReference<User>(new User(),new ReferenceQueue<User>());  
   ```
+
+### int和Integer的区别  
++ int的包装类是Integer，字面量在-128到127之间，Integer不会new对象，比较的是数值，所以下面打印的是ture和false
+  ```java
+    Integer a = 100, b = 100, c = 128, d = 128;
+
+    System.out.println(a==b);//ture
+    System.out.println(c==d);//false
+  ```
+
+### String、StringBuilder和StringBuffer的区别
++ String类中使用字符数组保存字符串，别去使用了final修饰符，所以String是不可变的只读字符串

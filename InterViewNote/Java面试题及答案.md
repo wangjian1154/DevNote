@@ -64,3 +64,8 @@
 
 ### String、StringBuilder和StringBuffer的区别
 + String类中使用字符数组保存字符串，别去使用了final修饰符，所以String是不可变的只读字符串
+
+### short s1 = 1; s1 = s1 + 1;有错吗？short s1 = 1,s1 += 1;有错吗？
++ 第一个s1+1,因为s1是short类型,1是int类型不能使用short类型接收
++ 第二个+=是Java中的运算符，内部进行了强制类型转换，所以正确
+

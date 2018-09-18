@@ -66,3 +66,14 @@ MessageQueue:用来存放Handler发送的消息的消息队列(双向链表结�
 </br>
 </br>
 从源码的角度来说，我们通过Handler发送Message到MessageQueue，MessageQueue调用enqueueMessage方法向消息队列中插入一条消息。Looper会不停的轮询Message，它是一个阻塞式死循环，当发现有消息的时候，会调用dispatchMessage方法分发给Handler，Handler通过handlerMessage进行处理这些消息。
+
+### Android中的动画有哪几类？各自的特点和区别是什么？
+动画可以分为三类，帧动画、补间动画、属性动画。
++ 帧动画(Frame)
+>将每一张静止的图片依次的显示出来,通过animation-list标签包裹
+
++ 补间动画(Tween)
+>补间动画只在视图层实现了动画，并没有改变View的本质。分别有平移(Translate)、缩放(scale)、旋转(rotate)、透明度(alpha)这四种
+
++ 属性动画(Property)
+>属性动画可以作用于任何对象

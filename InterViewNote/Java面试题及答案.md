@@ -64,6 +64,10 @@
 
 ### String、StringBuilder和StringBuffer的区别
 + String类中使用字符数组保存字符串，别去使用了final修饰符，所以String是不可变的只读字符串
++ StringBuffer中很多方法都带有synchronized关键字，所以它是线程安全的，执行效率比StringBuilder要低一些
+String适用于少量字符串操作的情况
+StringBuilder适用于单线程下载字符缓冲区进行大量操作的情况
+StringBuffer使用多线程下在字符缓冲区进行大量操作的情况
 
 ### short s1 = 1; s1 = s1 + 1;有错吗？short s1 = 1,s1 += 1;有错吗？
 + 第一个s1+1,因为s1是short类型,1是int类型不能使用short类型接收

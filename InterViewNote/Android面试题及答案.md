@@ -76,4 +76,45 @@ MessageQueue:用来存放Handler发送的消息的消息队列(双向链表结�
 >补间动画只在视图层实现了动画，并没有改变View的本质。分别有平移(Translate)、缩放(scale)、旋转(rotate)、透明度(alpha)这四种
 
 + 属性动画(Property)
->属性动画可以作用于任何对象
+>属性动画可以作用于任何对象，并且是通过改变对象的属性值而实现的一种动画
+
+**属性动画中重要的方法及分类**
+###### ValueAnimator
+>ValueAnimator是这个属性动画机制中最核心的类。因为属性动画就是通过不断的改变对象的属性值来实现的动画效果，初始值和结束值之间的动画过渡就是由ValueAnimator这个来完成就算的。
+
+使用ValueAnimator将一个对象从0平滑过渡到1，间隔周期300ms。
+```JAVA
+ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+animator.setDuration(300);
+animator.start();
+```
+
+###### ObjectAnimator
+>ObjectAnimator是最常用的属性动画，它继承玉ValueAnimator
+
+将一张图片水平向右移动100px，然后回到原位
+```java
+// 沿X轴向移动100px，然后向左移动回到原位
+// 沿Y轴移动，ofFloat第二个参数传入translationY
+ObjectAnimator animator = ObjectAnimator.ofFloat(image, "translationX", 0f, 100f, 0f);
+// 动画执行时长2s，默认300ms
+animator.setDuration(2000);
+animator.start();。
+```
+属性动画总图片的移动实现了图片真正意义上的移动，改变位置后可以点击，与此相比，补间动画只是改变了图片的显示效果，这也是它的缺点。
+
+ofFloat方法中第二个参数可以传入任意对象的属性名，ObjectAnimator内部会查找该对象对应的get、set方法来设置属性值。
+
+###### 组合动画
+>组合动画需要借助AnimatorSet完成。通过实例化AnimatorSet.Builder实例后进行配置属性
+
+图片从屏幕左侧移动到右侧，再回到原位，同时透明度从0调节到1，然后垂直旋转360度
+```java
+ObjectAnimator trans = ObjectAnimator.ofFloat(image, "translationX", -100f, 100f, 0f);
+ObjectAnimator alpha = ObjectAnimator.ofFloat(image, "alpha", 0f, 1f);
+ObjectAnimator rotation = ObjectAnimator.ofFloat(image, "rotationY", 0f, 360f);
+AnimatorSet animatorSet = new AnimatorSet();
+animatorSet.play(trans).with(alpha).before(rotation);
+animatorSet.setDuration(5000);
+animatorSet.start();
+```

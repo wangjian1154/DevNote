@@ -11,3 +11,5 @@
 - String、StringBuilder和StringBuffer的区别
 
 - short s1 = 1; s1 = s1 + 1;有错吗？short s1 = 1,s1 += 1;有错吗？
+
+- Http和Https的区别

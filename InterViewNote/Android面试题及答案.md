@@ -193,3 +193,7 @@ animatorSet.start();
 >当我们不要使用WebView对象时，应该调用它的destory()函数来销毁它，并释放其占用的内存，否则其长期占用的内存也不能被回收，从而造成内存泄露。
   解决方法：
   为WebView另外开启一个进程，通过AIDL与主线程进行通信，WebView所在的进程可以根据业务的需要选择合适的时机进行销毁，从而达到内存的完整释放。
+
+
+### Activity A启动另一个Activity B会回调哪些方法？如果Activity B是完全透明呢？如果启动的是一个Dialog呢？
+>Activity A启动另一个Activity B会回调的方法：Activity A的onPause()——>Activity B的onCreate()——>onStart()——>onResume()——>Activity A的onStop();如果Activity B是完全透明的，则最后不会调用Activity的onStop(),如果是Dialog，也不会

@@ -71,3 +71,13 @@ android:nextFocusRight=""
   ```
   adb shell
   ```
+ 
+ 安装apk到设备中
+  ```
+  adb install [apk的文件路径]
+  ```
+  
+  卸载apk
+   ```
+  adb uninstall [apk的包名]
+  ```

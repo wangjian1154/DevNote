@@ -78,3 +78,9 @@ StringBuffer使用多线程下在字符缓冲区进行大量操作的情况
 + Http是超文本传输协议，信息是明文传输，Https这是具有安全性的ssl加密传输协议
 + Http默认端口是80，Https默认端口是443
 + http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。
+
+### Cookie和Session的区别
++ Cookie和Session都是会话技术，Cookie运行在客户端，Session运行在服务端。
++ Cookie有大小限制以及存在浏览器的个数也有限制，Session没有大小限制和服务器的内存有关。
++ Cookie有安全隐患，通过拦截本地文件找得到你的Cookie后，可以进行攻击。
++ Session是保存在服务端上存在一段时间才会消失，如果Session过多会增加服务器的压力。

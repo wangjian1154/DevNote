@@ -197,3 +197,21 @@ animatorSet.start();
 
 ### Activity A启动另一个Activity B会回调哪些方法？如果Activity B是完全透明呢？如果启动的是一个Dialog呢？
 >Activity A启动另一个Activity B会回调的方法：Activity A的onPause()——>Activity B的onCreate()——>onStart()——>onResume()——>Activity A的onStop();如果Activity B是完全透明的，则最后不会调用Activity的onStop(),如果是Dialog，也不会
+
+### 热修复原理
+>热修复：让应用能够在无需重新安装的情况实现更新，帮助应用建立动态修复的能力
+
+</br>
+**热修复分为三大流派**
+- Native方案：AndFix、KKFix等
+- Java方案：Qzone的超级补丁、Tinker、Robust
+- 混合方案：Sophix
+
+**AndFix** 采用Native Hook的方式，这套方案直接使用dalvik_replaceMethod替换class中方法的实现，由于它并没有整体替换class，而field在class中的相对地址在class加载时已确定，所以AndFix无法支持新增或者删除filed的情况（通过替换init与clinit只可以修改field的数值）。
+也正因为如此，AndFix可以支持的补丁场景相对有限，仅仅可以使用它来修复特点的问题。另外使用
+Native替换将会面临比较复杂的兼容性的问题，最大的优点在于立即生效。
+</br>
+**Qzone** 方案并没有开源，但在github上Nuwa采用了相同的方式，这个方案使用classloader的方式，能够实现更加友好的类替换。而且这与我们加载Multidex的做法相似，能基本保证稳定性和兼容性。为了解决unexpected DEX problem异常而采用插桩的方式，从而规避了问题的出现，事实上，Android系统的这些检查规则是非常有意义的，这会导致Qzone方案在Dalvik与Art会产生一些问题。
+</br>
+**Tinker** 是全量替换新的Dex，为了减轻包的大小，微信自研了DexDiff算法，他深度利用Dex的
+格式来减少差异的大小。简单来说，在编译时通过新旧两个Dex生成差异path.dex。在运行时，将差异patch加载。

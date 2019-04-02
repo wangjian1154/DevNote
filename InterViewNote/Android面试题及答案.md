@@ -215,3 +215,47 @@ Native替换将会面临比较复杂的兼容性的问题，最大的优点在�
 </br>
 **Tinker** 是全量替换新的Dex，为了减轻包的大小，微信自研了DexDiff算法，他深度利用Dex的
 格式来减少差异的大小。简单来说，在编译时通过新旧两个Dex生成差异path.dex。在运行时，将差异patch加载。
+
+### ANR的原因
+- 耗时的网络访问
+- 大量的数据读写
+- 数据库操作
+- 硬件操作（如Camera）
+- 调用thread的join()方法、sleep()方法、wait()方法或者等待线程锁的时候
+- service binder的数量达到上限
+- system server中发生WatchDog ANR
+- service忙导致超时无响应
+- 其他线程持有锁，导致主线程等待超时
+- 其它线程终止或崩溃导致主线程一直等待
+
+### 图片的三级缓存原理
+>当Android端需要获取数据时候，例如获取网络图片，首先从内存中根据键名查找，内存中没有就会去磁盘或者数据库中查找，若再没有会从网络获取，并存入内存和磁盘或数据库。
+
+### LruCache底层原理
+>LruCache中的Lru算法就是通过LinkedHashMap来实现的，LinkedHashMap继承于HashMap，它使用双向列表来存储Map中Entry顺序关系，对于get，put，remove等操作。LinkedHashMap
+除了要做HashMap要做的事情，还做些调整Entry顺序链表的工作。LruCache中将LinkedHashMap的顺序设置为LRU顺序来实现LRU缓存，每次调用get(也就是从内存缓存中取图片)，则将该对象移到链表的尾端。
+调用put插入新的对象也是存储在链表尾端，这样当内存缓存达到设定的最大值时，将链表头部的对象（近期最少用到的）移除。
+
+### AIDL的使用与原理
+>AIDL是Android Interface Definition Language的缩写，也就是Android接口定义语言，我们在写完AIDL文件后，系统会自动生成一个同名的.java文件，在服务端和客户端也可以照常使用
+这个类进行跨进程通信。
+
+### Activity如与Service通信
+>可以使用bindService的方式，现在Acitivity中实现一个ServiceConnection接口，并且将该接口传递给bindService()方法，在ServiceConnect接口的onServiceConnectioned()方法里执行相关操作。
+
+### 遇到过哪些关于Fragment的问题，如何处理的
+- getActivity()空指针：这种情况一般发生在异步线程调用getActivity(),而fragment已经onDetach(),此时就会空指针，解决方法是在Fragment里使用一个全局变量mActivity，在onAttached里赋值，这样可能会
+引起内存泄漏，但是异步线程没有停止的情况本身就可能导致内存泄漏，相比空指针，这种情况更佳。
+- Fragment视图重叠：在onCreate方法加载Fragment，并没有判断saveInstanceState==null或if(findFragmentByTag(mFragmentTag) == null)，导致重复加载了一个Fragment导致重叠，解决方法判空。
+
+### 描述下View的绘制原理
+View的绘制主要分为三步
+- onMeaSure：测了视图大小，从顶层父级View到子View递归调用measure()方法，measure()调用onMeasure()方法，onMeasure方法完成绘制工作，
+- onLayout：确定视图位置，从顶层父View到子View递归调用layout()方法，父View将上一步measure()方法得到的子View的布局大小和布局参数，将子View放在合适的位置。
+- onDraw：绘制最终视图，首先ViewRoot创建一个Canvas对象，然后调用onDraw()方法进行绘制，onDraw方法绘制顺序是：绘制视图背景，绘制画布的图层，绘制View的内容，绘制子视图如果有的话，还原图层，绘制滚动条。
+
+### Serializable和Parcelable区别
+>Serializable的作用是为了保存对象的属性到本地文件、数据库、网络流、RMI以方便数据传输，当然这种传输可以是程序内也可以是两个程序之间，使用了反射技术，并且期间产生临时对象。Android的Parcelable的设计初衷
+是因为Serializable执行效率慢。为了在程序内各个组件和程序之间高效进行数据传输而设计。这些数据仅在内存中存在，Parcelable是通过IBinder通信的消息的载体。
+
+Parcelable的性能比Serializable好，在内存开销方面较小，所以在内存间数据传输时推荐使用Parcelable，如activity间传输数据，而Serializable可将数据持久化方便保存，所以在需要保存或网络传输数据时选择Serializable，因为android不同版本Parcelable可能不同，所以不推荐使用Parcelable进行数据持久化

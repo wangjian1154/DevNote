@@ -259,3 +259,42 @@ View的绘制主要分为三步
 是因为Serializable执行效率慢。为了在程序内各个组件和程序之间高效进行数据传输而设计。这些数据仅在内存中存在，Parcelable是通过IBinder通信的消息的载体。
 
 Parcelable的性能比Serializable好，在内存开销方面较小，所以在内存间数据传输时推荐使用Parcelable，如activity间传输数据，而Serializable可将数据持久化方便保存，所以在需要保存或网络传输数据时选择Serializable，因为android不同版本Parcelable可能不同，所以不推荐使用Parcelable进行数据持久化
+
+### 关于socket的认识理解
+>Socket是进程通讯的一种方式，即调用这个网络库的一些API函数实现分布在不同主机的相关进程之间的数据交换。Socket是通信的基石，是支持TCP/IP协议的基本操作单元，它是网络通信过程中端点的抽象表示。包含进行网络通讯的五种必要信息
+连接使用的协议，本机主机的IP地址，本地进程的协议端口，远程主机的IP地址，本地进程的协议端口远程主机的IP地址，远程进程的协议端口。
+
+### TCP/UDP比较
+- TCP是面向连接的，UDP是面向无连接的
+- TCP面向数据流，UDP是基于数据报
+- TCP保证数据正确性，UDP可能会丢包
+- TCP保证数据顺序，UDP不保证
+
+### 谈谈Android数据存储方式
+Android提供五种数据存储方式
+- 使用SharedPrefences存储数据
+- 文件存储
+- SQLite数据库存储
+- 使用ContentProvider存储，主要用于应用程序之间的数据交换，从而能让其他应用程序保存或读取ContentProvider的数据
+- 网络存储数据，通过网络上提供给我们的存储空间来上传或下载
+
+### 横竖屏切换Activity的生命周期
+- 不设置Activity的android:configChanges时，切换会重新调用各个生命周期，切横屏时会执行一次，切竖屏会执行两次。
+- 设置Activity的android:configChanges="orientation"时。切屏还是会重新调用各个生命周期，切横屏、竖屏会各执行一次。
+- 设置Activity的android:configChanges="orientation|keyboardHidden"时，切屏不会调用各个生命周期，只会调用onConfigurationChanged。
+
+### WebView优化
+>客户端加载H5页面之前，需要先初始化WebView，，在WebView完成初始化之前，后续界面的加载过程都是被阻塞的。
+
+常见的优化WebView的方式。
+- 全局WebView
+- 客户端代理页面请求。WebView初始化完成后向客户端请求数据。
+- asset存放离线包
+
+### 解决65535的限制
+>随着Android应用程序越来越大，在Android系统中，一个App所有的代码，都在一个Dex文件中，Dex是一个类似Jar的存储了多个Java字节码的归档文件。因为Android系统使用Dalvik虚拟机，所以需要把使
+用Java Compiler编译之后的class文件转换成Dalvik能够执行的class文件，这里需要强调的是，Dex和Jar一样是一个归档文件，里面仍然是Java代码对应的字节码文件。当Android系统启动一个应用的时候，
+有一步是对Dex进行优化，这个过程有一个专门的工具来处理，叫DexOpt。DexOpt的执行过程是在第一次加载Dex文件的时候执行的。这个过程会生成一个ODEX文件，即Optimised。DexOpt会把每一个类的方
+法id检索起来，存在一个链表结构里面。但是这个链表的长度是用一个short类型来保存的，导致了方法id的数目不能够超过65536个
+
+为了解决这个问题，官方提出使用multidex包进行多dex编译的方法。

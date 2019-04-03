@@ -27,3 +27,15 @@
 - 描述下View的绘制原理
 
 - Serializable和Parcelable区别
+
+- 关于socket的认识理解
+
+- TCP/UDP比较
+
+- 谈谈Android数据存储方式
+
+- 横竖屏切换Activity的生命周期
+
+- WebView优化
+
+- 解决65535的限制
